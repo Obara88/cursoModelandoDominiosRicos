@@ -1,0 +1,44 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PaymentContext.Domain.Enums;
+using PaymentContext.Domain.ValueObjects;
+
+namespace PaymentContext.Tests
+{
+    [TestClass]
+    public class DocumentTests
+    {
+        [TestMethod]
+        public void ShouldReturnErrorWhenCNPJIsInvalid()
+        {
+            var doc = new Document("123", EDocumentType.CNPJ);
+            Assert.IsTrue(doc.Invalid);
+        }
+
+        [TestMethod]
+        public void ShouldReturnSuccessWhenCNPJIsValid()
+        {
+            var doc = new Document("40452495000104", EDocumentType.CNPJ);
+            Assert.IsTrue(doc.Valid);
+        }
+
+        [TestMethod]
+        public void ShouldReturnErrorWhenCPFIsInvalid()
+        {
+            var doc = new Document("2541095", EDocumentType.CPF);
+            Assert.IsTrue(doc.Invalid);
+        }
+
+        [TestMethod]
+        [DataTestMethod]
+        [DataRow("73438067005")]
+        [DataRow("12837759058")]
+        [DataRow("48290348070")]
+        public void ShouldReturnSuccessWhenCPFIsValid(string cpf)
+        {
+            var doc = new Document(cpf, EDocumentType.CPF);
+            Assert.IsTrue(doc.Valid);
+        }
+
+    }
+
+}
